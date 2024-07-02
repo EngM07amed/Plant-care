@@ -1,0 +1,5 @@
+class weatherService {
+  void getmethod() {
+    
+  }
+}
