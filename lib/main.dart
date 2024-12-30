@@ -1,14 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
-
+import 'package:plantcare/screens/Start.dart';
 import 'package:plantcare/screens/login.dart';
 import 'package:plantcare/screens/nav.dart';
 import 'package:plantcare/screens/register.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:plantcare/services/chatg.dart';
-import 'firebase_options.dart';
 
 int index = 3;
 Future<void> main() async {
@@ -16,12 +13,6 @@ Future<void> main() async {
     apiKey: GEMAIN9_API_KEY,
   );
 
-// ...
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   runApp(const MyApp());
 }
 
@@ -34,17 +25,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        print('User is signed in!');
-      }
-    });
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -54,7 +34,7 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: Register(),
+          home: Start1(),
           /*( FirebaseAuth.instance.currentUser != null &&
         FirebaseAuth.instance.currentUser!.emailVerified)?Login() : Start1(),
         */

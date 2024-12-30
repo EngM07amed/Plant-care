@@ -1,18 +1,27 @@
 import 'dart:io';
 import 'package:adoptive_calendar/adoptive_calendar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:plantcare/customs_wedgit/list_text.dart';
+import 'package:plantcare/models/jornaldata.dart';
+import 'package:plantcare/screens/nav.dart';
+import 'package:plantcare/screens/profile.dart';
+import 'package:intl/intl.dart';
+import 'package:plantcare/services/jouranl.dart';
 
 class Journal extends StatefulWidget {
-  const Journal({Key? key});
-
+  const Journal({Key? key, required this.label});
+  final String label;
   @override
   State<Journal> createState() => _JournalState();
 }
 
 class _JournalState extends State<Journal> {
+  TextEditingController title = TextEditingController();
+  TextEditingController age = TextEditingController();
+  TextEditingController data = TextEditingController();
+  TextEditingController taskValue = TextEditingController();
   DateTime? pickedDate;
   File? _image;
   final picker = ImagePicker();
@@ -50,6 +59,7 @@ class _JournalState extends State<Journal> {
                   ],
                 ),
                 child: TextField(
+                  controller: title,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Colors.white),
@@ -92,9 +102,9 @@ class _JournalState extends State<Journal> {
                             borderSide: BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.circular(20.r),
                           ),
-                          labelText: 'Diagnose',
+                          labelText: widget.label,
                           labelStyle: const TextStyle(color: Colors.grey),
-                          hintText: 'Septoria Leaf Spot',
+                          hintText: widget.label,
                           hintStyle: const TextStyle(color: Colors.black),
                           filled: true,
                           fillColor: Colors.white,
@@ -125,6 +135,7 @@ class _JournalState extends State<Journal> {
                             ],
                           ),
                           child: TextField(
+                            controller: data,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(9.r),
                               focusedBorder: OutlineInputBorder(
@@ -132,7 +143,9 @@ class _JournalState extends State<Journal> {
                                     const BorderSide(color: Colors.white),
                                 borderRadius: BorderRadius.circular(20.r),
                               ),
-                              hintText: 'date',
+                              hintText: pickedDate != null
+                                  ? DateFormat('yyyy-MM-dd').format(pickedDate!)
+                                  : 'date',
                               suffixIcon: IconButton(
                                 onPressed: () async {
                                   pickedDate = await showDialog(
@@ -173,6 +186,7 @@ class _JournalState extends State<Journal> {
                             ],
                           ),
                           child: TextField(
+                            controller: age,
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(9.r),
                               focusedBorder: OutlineInputBorder(
@@ -201,7 +215,7 @@ class _JournalState extends State<Journal> {
                 ),
               ],
             ),
-            Padding(
+            /*Padding(
               padding: EdgeInsets.only(top: 30.r, left: 20.r, right: 20.r),
               child: Container(
                 decoration: BoxDecoration(
@@ -217,7 +231,7 @@ class _JournalState extends State<Journal> {
                 height: 200.h,
                 child: Column(
                   children: [
-                    Padding(
+                     Padding(
                       padding: EdgeInsets.only(right: 300.r),
                       child: Text(
                         'Note',
@@ -244,7 +258,7 @@ class _JournalState extends State<Journal> {
                   ],
                 ),
               ),
-            ),
+            ),*/
             Center(
               child: InkWell(
                 onTap: () {
@@ -253,8 +267,8 @@ class _JournalState extends State<Journal> {
                 child: Padding(
                   padding: EdgeInsets.only(top: 30.0.r),
                   child: Container(
-                    height: 50.h,
-                    width: 230.w,
+                    height: 250.h,
+                    width: 300.w,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20.r),
@@ -293,29 +307,32 @@ class _JournalState extends State<Journal> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(40.r),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20.r),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color(0xFF056839),
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                height: 160.h,
-                child: TextField(
-                  decoration: InputDecoration(
-                    suffixIcon: IconButton(
-                        onPressed: () {}, icon: Icon(Icons.arrow_drop_down)),
-                    hintText: 'tasks',
-                    hintStyle: TextStyle(fontSize: 20.sp, color: Colors.black),
-                    filled: true,
-                    fillColor: Colors.white,
-                    hoverColor: Colors.white,
-                  ),
+              padding: EdgeInsets.symmetric(horizontal: 30.r, vertical: 30.r),
+              child: Text(
+                'Task',
+                style: TextStyle(
+                    fontSize: 30.sp, color: Color.fromARGB(255, 3, 93, 37)),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(15.r),
+              child: TextField(
+                controller: taskValue,
+                maxLines: 7,
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                      onPressed: () async {
+                        if (taskValue.text.isNotEmpty) {
+                          await AddTask().addTask(taskValue.text);
+                          taskValue.clear();
+                        }
+                      },
+                      icon: const Icon(Icons.add)),
+                  hintText: 'add task',
+                  hintStyle: TextStyle(fontSize: 20.sp),
+                  filled: true,
+                  fillColor: Colors.white,
+                  hoverColor: Colors.white,
                 ),
               ),
             ),
@@ -327,7 +344,7 @@ class _JournalState extends State<Journal> {
                   height: 60.h,
                   child: Padding(
                     padding:
-                        EdgeInsets.only(left: 23.r, bottom: 10.r, right: 30.r),
+                        EdgeInsets.only(left: 25.r, bottom: 10.r, right: 30.r),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF54796E),
@@ -335,7 +352,19 @@ class _JournalState extends State<Journal> {
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        final status = await RJornal1().jornal(JornsalData(
+                            age: age.text,
+                            date: DateFormat('yyyy-MM-dd').format(pickedDate!),
+                            title: title.text,
+                            image: _image!));
+                        if (status == true) {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return const Profile();
+                          }));
+                        }
+                      },
                       child: Row(
                         children: [
                           Icon(
@@ -359,14 +388,14 @@ class _JournalState extends State<Journal> {
                   ),
                 ),
                 SizedBox(
-                  width: 10.w,
+                  width: 60.w,
                 ),
                 SizedBox(
                   width: 200.w,
                   height: 60.h,
                   child: Padding(
                     padding:
-                        EdgeInsets.only(left: 23.r, bottom: 10.r, right: 30.r),
+                        EdgeInsets.only(left: 23.r, bottom: 10.r, right: 10.r),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 227, 91, 114),
@@ -374,7 +403,12 @@ class _JournalState extends State<Journal> {
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const select1();
+                        }));
+                      },
                       child: Row(
                         children: [
                           Icon(

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:plantcare/const.dart';
+import 'package:plantcare/customs_wedgit/image.dart';
 import 'package:plantcare/models/treatmentData.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,7 +9,7 @@ class GetTreatment {
   Future<List<modelTreatment>> getTips() async {
     try {
       http.Response response =
-          await http.get(Uri.parse('http://192.168.1.6:5001/select_data'));
+          await http.get(Uri.parse('$baseUrl/select_data'));
       Map<String, dynamic> data = jsonDecode(response.body);
 
       List<modelTreatment> TreatmentList = [];
@@ -26,8 +28,10 @@ class GetTreatment {
 
   Future<List<modelTreatment>> getTreatment() async {
     try {
-      http.Response response = await http
-          .get(Uri.parse('http://192.168.1.6:5001/select_data_treetment'));
+      http.Response response =
+          await http.get(Uri.parse('$baseUrl/select_data_treetment'), headers: {
+        'Cookie': sessionPredict,
+      });
       Map<String, dynamic> data = jsonDecode(response.body);
 
       List<modelTreatment> TreatmentList = [];

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:plantcare/customs_wedgit/design.dart';
@@ -23,9 +24,6 @@ class _LoginState extends State<Login> {
     if (googleUser == null) {
       return;
     }
-
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser.authentication;
 
     /* final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
@@ -55,15 +53,15 @@ class _LoginState extends State<Login> {
             ),
           ),
           SizedBox(
-            height: 4,
+            height: 4.h,
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Text(
               'Welcome Back',
               style: TextStyle(
                 color: Color.fromARGB(255, 0, 0, 0),
-                fontSize: 28,
+                fontSize: 40.sp,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w800,
                 height: 0,
@@ -71,26 +69,29 @@ class _LoginState extends State<Login> {
             ),
           ),
           SizedBox(
-            height: 4,
+            height: 10.h,
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.r),
             child: Text(
               'log in to your account',
               style: TextStyle(
                 color: Color.fromARGB(255, 0, 0, 0),
-                fontSize: 15,
+                fontSize: 25.sp,
                 fontFamily: 'Inter',
                 height: 0,
               ),
             ),
+          ),
+          SizedBox(
+            height: 20.h,
           ),
           Form(
             key: formState,
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(40.0),
+                  padding: EdgeInsets.all(50.0.r),
                   child: boxDesign(
                     controller: username,
                     Text1: "username",
@@ -103,7 +104,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  padding: EdgeInsets.symmetric(horizontal: 50.0.r),
                   child: boxDesign(
                     validator: (val) {
                       if (val == "") {
@@ -115,69 +116,24 @@ class _LoginState extends State<Login> {
                     Text1: "password",
                   ),
                 ),
-                Container(
-                  alignment: Alignment.topRight,
-                  padding: const EdgeInsets.only(right: 29.0),
-                  child: TextButton(
-                    onPressed: () async {
-                      if (username.text == "") {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.error,
-                          animType: AnimType.rightSlide,
-                          title: 'Error',
-                          desc:
-                              'write your username to send message to reset password',
-                        ).show();
-                      }
-                      try {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.warning,
-                          animType: AnimType.rightSlide,
-                          title: 'Error',
-                          desc: 'check your username  to reset password',
-                        ).show();
-                      } catch (e) {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.warning,
-                          animType: AnimType.rightSlide,
-                          title: 'Error',
-                          desc: ' please Write  your username correct',
-                        ).show();
-                      }
-                    },
-                    child: const Text(
-                      'Forget password',
-                      style: TextStyle(
-                        color: Color(0xFF2F7346),
-                        fontSize: 11,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w600,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(30.0),
+            padding: EdgeInsets.all(50.0.r),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(80, 50),
+                minimumSize: Size(100.w, 60.h),
                 backgroundColor: Color(0xFF54796E),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(5.r),
                 ),
               ),
-              child: const Text(
+              child: Text(
                 'log In',
                 style: TextStyle(
                   color: Color.fromARGB(255, 255, 255, 255),
-                  fontSize: 15,
+                  fontSize: 20.sp,
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w800,
                 ),
@@ -213,16 +169,19 @@ class _LoginState extends State<Login> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Don’t have an account? "),
+                  Text(
+                    "Don’t have an account? ",
+                    style: TextStyle(fontSize: 20.sp),
+                  ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pushReplacementNamed("Register");
                     },
-                    child: const Text(
+                    child: Text(
                       'Sign Up ',
                       style: TextStyle(
                         color: Color(0xff006633),
-                        fontSize: 15,
+                        fontSize: 20.sp,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
                       ),
@@ -235,7 +194,7 @@ class _LoginState extends State<Login> {
           const SizedBox(
             height: 9,
           ),
-          Container(
+          /* Container(
               alignment: Alignment.center,
               child: const Text(
                 "Or continue with ",
@@ -275,7 +234,7 @@ class _LoginState extends State<Login> {
                 )
               ],
             ),
-          ),
+          ),*/
         ])
       ],
     ));

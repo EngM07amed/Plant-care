@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:plantcare/customs_wedgit/image.dart';
 import 'package:plantcare/models/jornaldata.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:plantcare/services/users_api.dart';
 
 import '../const.dart';
 
@@ -27,6 +30,7 @@ class RJornal1 {
         length,
         filename: jornal2.image.path.split('/').last,
       );
+      request.headers.addAll({'Cookie': sessionPredict});
       request.files.add(multipartFile);
 
       // Send the request
@@ -35,6 +39,7 @@ class RJornal1 {
 
       if (response.statusCode == 200) {
         log('success ');
+        log(response.body.toString());
         return true;
       } else {
         // Registration failed
@@ -50,68 +55,91 @@ class RJornal1 {
 }
 
 class saved {
-  Future<void> getJORNALDetails() async {
+  Future<List<JornsalData>> getJORNALDetails() async {
     // Define the URL
-    var url = 'http://192.168.1.7:5001/saved_journal';
+    var url = '$baseUrl/saved_journal';
 
     try {
-      final response = await http.get(Uri.parse(url));
-
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Cookie': session,
+        },
+      );
       if (response.statusCode == 200) {
         // Parse the response body
-        final Map<String, dynamic> data = json.decode(response.body);
-
+        final bodyDecoded = jsonDecode(response.body);
+        final List data = bodyDecoded['Journal_Data'];
+        log(bodyDecoded.toString());
         // Extract the required fields
-        String title = data['title'];
-        String age = data['plant_age'];
-        String date = data['date'];
-        String image = data['file'];
+        List<JornsalData> jornsals = [];
+        for (var item in data) {
+          String title = item['title'];
+          String age = item['Plant_age'];
+          String date = item['date'] ?? '';
+          String image = item['image'];
+          String diagnoses = item['Disease_name'];
+          jornsals.add(JornsalData(
+              age: age,
+              date: date,
+              title: title,
+              image: File(image),
+              diagnoses: diagnoses));
+        }
 
-        // Print the details (or use them as needed)
-        print('title: $title');
-        print('plant_age: $age');
-        print('date: $date');
-        print('file: $image');
+        return jornsals;
       } else {
         print('Failed to load user details');
+        throw 'Failed to load user details';
       }
     } catch (e) {
       print('Error: $e');
+      throw e.toString();
     }
   }
 }
 
 class task {
   Future<tasks> getJOURNALDetails() async {
-    var url = '$baseUrl/saved_journal';
+    var url = '$baseUrl/tasks';
     try {
-      final response = await http.get(Uri.parse(url));
+      final response =
+          await http.get(Uri.parse(url), headers: {'Cookie': sessionPredict});
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        tasks t1 = tasks(
-            frequency_based: data['journal']['frequency-based'],
-            immediate: data['journal']['immediate'],
-            one: data['journal']['one-time']);
-        return t1;
+        final data = jsonDecode(response.body);
+        final jornal = data['journal'];
+        if (jornal != null) {
+          tasks t1 = tasks(
+            frequency_based:
+                jornal['frequency-based'] ?? [], // Providing default value
+            immediate: jornal['immediate'] ?? [], // Providing default value
+            one: jornal['one-time'] ?? [], // Providing default value
+          );
+          return t1;
+        } else {
+          throw Exception("Journal data is null");
+        }
+      } else {
+        throw Exception("Failed to load tasks");
       }
-      throw response.statusCode;
     } catch (e) {
-      print('Error: $e');
+      log('Error: $e');
       throw e;
     }
   }
 }
 
-class addTask {
-  Future<bool> AddTask(addtask add1) async {
+class AddTask {
+  Future<bool> addTask(String task) async {
     var url = Uri.parse('$baseUrl/add_task');
     log("message");
     try {
       var request = http.MultipartRequest('POST', url);
 
       // Add fields (username, email, password) to the request
-      request.fields['task'] = add1.task;
+      request.fields['task'] = task;
+      request.headers['Cookie'] = sessionPredict;
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
@@ -132,21 +160,20 @@ class addTask {
 }
 
 class displaytask {
-  Future<addtask> getJOURNALtask() async {
+  Future<List<String>> getJOURNALtask() async {
     var url = '$baseUrl/select_additional_task';
     try {
-      final response = await http.get(Uri.parse(url));
+      final response =
+          await http.get(Uri.parse(url), headers: {'Cookie': sessionPredict});
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
-        addtask t2 = addtask(
-          task: data['task'],
-        );
-        return t2;
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        final List tasks = data['task'];
+        return tasks.map((e) => e['task'] as String).toList();
       }
       throw response.statusCode;
     } catch (e) {
-      print('Error: $e');
+      log('Error: $e');
       throw e;
     }
   }

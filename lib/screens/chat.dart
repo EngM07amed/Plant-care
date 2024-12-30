@@ -15,13 +15,11 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  TextEditingController? message;
   final Gemini gemini = Gemini.instance;
   List<ChatMessage> messages = [];
   ChatUser currentUser = ChatUser(
-      id: "0",
-      firstName: "nada",
-      profileImage:
-          "assets/images/vecteezy_profile-user-icon-isolated-on-white-background-vector-eps10_ 1.png");
+      id: "0", firstName: "nada", profileImage: "assets/images/holder_img.png");
   ChatUser geminUser = ChatUser(
       id: "1",
       firstName: "Ella",

@@ -3,10 +3,16 @@ import 'dart:io';
 class JornsalData {
   final String title;
   final String age;
+  final String diagnoses;
   final String date;
   final File image;
 
-  JornsalData(this.age, this.date, this.title, this.image);
+  JornsalData(
+      {required this.age,
+      required this.date,
+      required this.title,
+      this.diagnoses = '',
+      required this.image});
 }
 
 class tasks {
@@ -18,10 +24,4 @@ class tasks {
       {required this.frequency_based,
       required this.immediate,
       required this.one});
-}
-
-class addtask {
-  final String task;
-
-  addtask({required this.task});
 }

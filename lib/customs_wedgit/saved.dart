@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:plantcare/const.dart';
+import 'package:intl/intl.dart';
+import '../screens/dieaseas1.dart';
+import '../screens/healty.dart';
+import '../services/jouranl.dart';
 
 class Saved extends StatefulWidget {
   const Saved({super.key});
@@ -50,40 +55,84 @@ class Saved2 extends StatefulWidget {
 class _Saved2State extends State<Saved2> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: 20.0.r, right: 20.r, top: 5.r),
-      child: Material(
-          elevation: 15,
-          shape: BeveledRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  bottomRight: Radius.elliptical(20.r, 10.r),
-                  bottomLeft: Radius.elliptical(10.r, 10.r))),
-          shadowColor: Color.fromARGB(255, 120, 114, 120),
-          child: SizedBox(
-            height: 80.h,
-            child: ListTile(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.r),
-                side: const BorderSide(color: Color.fromARGB(255, 69, 66, 66)),
-              ),
-              dense: true,
-              minVerticalPadding: 20.r,
-              leading: Image.asset("assets/images/unsplash_WPZlpwJx0Lk.png"),
-              title: Text(
-                "Healthy ",
-                style: TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              subtitle: Padding(
-                padding: EdgeInsets.only(left: 200.0.r),
-                child: Text("data"),
-              ),
-            ),
-          )),
-    );
+    return FutureBuilder(
+        future: saved().getJORNALDetails(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.data != null && snapshot.hasData) {
+            final jornalData = snapshot.data;
+            if (jornalData!.isEmpty) {
+              return Center(
+                  child: Text(
+                'No Jornal Saved yet!!',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ));
+            }
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: jornalData!.length,
+              itemBuilder: (context, index) {
+                final jornal = jornalData[index];
+                return Padding(
+                  padding: EdgeInsets.only(
+                      left: 20.0.r, right: 20.r, top: 5.r, bottom: 10.r),
+                  child: Material(
+                    elevation: 15,
+                    shape: BeveledRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.elliptical(20.r, 10.r),
+                            bottomLeft: Radius.elliptical(10.r, 10.r))),
+                    shadowColor: Color.fromARGB(255, 0, 71, 12),
+                    child: SizedBox(
+                      height: 80.h,
+                      child: InkWell(
+                        onTap: () {
+                          if (jornal.diagnoses == 'Healthy') {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Healthy(
+                                      jornal: jornal,
+                                    )));
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Problem1(
+                                      jornal: jornal,
+                                    )));
+                          }
+                        },
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.network(jornal.image.path
+                                      .contains('uploads')
+                                  ? '$baseUrl/${jornal.image.path}'
+                                  : '$baseUrl/uploads/${jornal.image.path}'),
+                              Text(
+                                jornal.diagnoses,
+                                style: TextStyle(
+                                  fontSize: 20.sp,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color.fromARGB(255, 3, 121, 23),
+                                ),
+                              ),
+                              Text(DateFormat('yy-MM-dd').format(
+                                  DateFormat('EEE, dd MMM yyyy HH:mm:ss')
+                                      .parse(jornal.date))),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+          return const Text('There are error!!');
+        });
   }
 }
 

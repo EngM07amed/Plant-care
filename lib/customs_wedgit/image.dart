@@ -1,10 +1,16 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:plantcare/const.dart';
 import 'package:plantcare/screens/Show_image.dart';
+import 'package:plantcare/services/users_api.dart';
+
+String sessionPredict = '';
 
 class ImageData extends StatefulWidget {
   const ImageData({
@@ -17,7 +23,7 @@ class ImageData extends StatefulWidget {
 
 class _ImageDataState extends State<ImageData> {
   File? image;
-  var url = 'http://192.168.1.7:5001/predict';
+  var url = '$baseUrl/predict';
   String? result;
   final picker = ImagePicker();
   Future<void> upload() async {
@@ -36,7 +42,12 @@ class _ImageDataState extends State<ImageData> {
           filename: image!.path.split('/').last,
         ),
       );
+      request.headers['Cookie'] = session;
       final response = await request.send();
+      if (response.statusCode == 200) {
+        sessionPredict = response.headers['set-cookie'] ?? '';
+        log(sessionPredict);
+      }
       final responseBody = await response.stream.bytesToString();
       print("Response: $responseBody");
       result = responseBody;
@@ -118,41 +129,50 @@ Future _showmodelbotttomsheet(
     void Function()? cameraMethod,
     void Function()? gaMethod}) {
   return showModalBottomSheet(
-      context: context,
-      builder: (context) => SizedBox(
-            width: double.infinity,
-            height: 600.h,
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              TextButton(
-                onPressed: cameraMethod,
-                child: Icon(
-                  Icons.camera_alt,
-                  size: 30.r,
-                  color: Color(0xFF204C25),
-                ),
-              ),
-              const Text(
-                "Camera",
-                style:
-                    TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
-              ),
-              SizedBox(
-                height: 100.h,
-              ),
-              TextButton(
-                onPressed: gaMethod,
-                child: Icon(
-                  Icons.photo_library,
-                  size: 30.r,
-                  color: Color(0xFF204C25),
-                ),
-              ),
-              const Text(
-                "Gallery",
-                style:
-                    TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
-              ),
-            ]),
-          ));
+    context: context,
+    builder: (context) => SizedBox(
+      width: double.infinity,
+      height: 400.h,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Select your Method to pic image",
+            style: TextStyle(
+                color: Color(0xFF204C25),
+                fontSize: 30.sp,
+                fontWeight: FontWeight.w600),
+          ),
+          SizedBox(height: 30.h),
+          TextButton(
+            onPressed: cameraMethod,
+            child: Icon(
+              Icons.camera_alt,
+              size: 30.r,
+              color: Color(0xFF204C25),
+            ),
+          ),
+          const Text(
+            "Camera",
+            style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
+          ),
+          SizedBox(
+            height: 70.h,
+          ),
+          TextButton(
+            onPressed: gaMethod,
+            child: Icon(
+              Icons.photo_library,
+              size: 30.r,
+              color: Color(0xFF204C25),
+            ),
+          ),
+          const Text(
+            "Gallery",
+            style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700),
+          ),
+        ],
+      ),
+    ),
+  );
 }

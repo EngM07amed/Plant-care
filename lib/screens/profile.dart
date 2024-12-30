@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:plantcare/const.dart';
 import 'package:plantcare/customs_wedgit/design.dart';
 import 'package:plantcare/customs_wedgit/saved.dart';
 import 'package:plantcare/screens/Edit.dart';
@@ -50,7 +51,7 @@ class _ProfileState extends State<Profile> {
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 20.sp),
+                                          fontSize: 25.sp),
                                     ),
                                   ),
                                   Padding(
@@ -59,12 +60,12 @@ class _ProfileState extends State<Profile> {
                                     child: Text(
                                       userData!.email,
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 13.sp),
+                                          color: Colors.black, fontSize: 20.sp),
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.only(
-                                        top: 40.r, left: 25.r, right: 25.r),
+                                        top: 40.r, left: 40.r, right: 40.r),
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         minimumSize: Size(350.h, 50.w),
@@ -80,7 +81,7 @@ class _ProfileState extends State<Profile> {
                                         style: TextStyle(
                                           color: Color.fromARGB(
                                               255, 255, 255, 255),
-                                          fontSize: 15.sp,
+                                          fontSize: 20.sp,
                                           fontFamily: 'Inter',
                                           fontWeight: FontWeight.w800,
                                         ),
@@ -109,7 +110,7 @@ class _ProfileState extends State<Profile> {
                                           "About us",
                                           style: TextStyle(
                                               color: Color(0xff54796E),
-                                              fontSize: 15.sp),
+                                              fontSize: 25.sp),
                                         )),
                                   ),
                                   Divider(
@@ -122,12 +123,14 @@ class _ProfileState extends State<Profile> {
                                         child: Text(
                                       "Saved Diagnoses",
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 18.sp),
+                                          color: Color(0xff54796E),
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 27.sp),
                                     )),
                                   ),
-                                  const Saved2(),
-                                  const Saved2(),
+                                  SizedBox(
+                                    height: 30.h,
+                                  ),
                                   const Saved2(),
                                 ],
                               ),
@@ -137,8 +140,11 @@ class _ProfileState extends State<Profile> {
                               left: 8.r,
                               child: CircleAvatar(
                                 radius: 70.r,
-                                backgroundImage: AssetImage(
-                                    "assets/images/480-[Converted] 3.png"),
+                                backgroundImage: NetworkImage(userData
+                                        .image.path
+                                        .contains('uploads/')
+                                    ? '$baseUrl/${userData.image.path}'
+                                    : '$baseUrl/uploads/${userData.image.path}'),
                               ),
                             ),
                           ],

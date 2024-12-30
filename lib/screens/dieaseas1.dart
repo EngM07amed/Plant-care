@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:plantcare/customs_wedgit/journalData.dart';
+import 'package:plantcare/models/jornaldata.dart';
+import 'package:intl/intl.dart';
+import '../const.dart';
 
 class Problem1 extends StatefulWidget {
-  const Problem1({super.key});
-
+  const Problem1({super.key, required this.jornal});
+  final JornsalData jornal;
   @override
   State<Problem1> createState() => _Problem1State();
 }
@@ -37,7 +40,7 @@ class _Problem1State extends State<Problem1> {
               ),
             ),
             Text(
-              "Early Blight",
+              widget.jornal.diagnoses,
               style: TextStyle(fontSize: 16.sp),
             ),
             SizedBox(
@@ -55,13 +58,15 @@ class _Problem1State extends State<Problem1> {
                             fontSize: 15.sp, fontWeight: FontWeight.w600),
                       ),
                       Text(
-                        "9 week",
+                        widget.jornal.age,
                         style: TextStyle(fontSize: 15.sp),
                       )
                     ],
                   ),
                   Text(
-                    "5/2/2024",
+                    DateFormat('yy-MM-dd').format(
+                        DateFormat('EEE, dd MMM yyyy HH:mm:ss')
+                            .parse(widget.jornal.date)),
                     style: TextStyle(fontSize: 15.sp),
                   ),
                 ],
@@ -78,38 +83,15 @@ class _Problem1State extends State<Problem1> {
             indent: 10.r,
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 8.0.r),
-          child: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 10.0.r),
-                child: Text(
-                  "Treatment:  ",
-                  style: TextStyle(
-                      fontSize: 20.sp,
-                      color: Color(0xff0091B0),
-                      fontWeight: FontWeight.w400),
-                ),
-              ),
-              Container(
-                width: 250.w,
-                child: Text(
-                  "Apply fungicides containing chlorothalonil or copper according to label instructions.",
-                  style: TextStyle(fontSize: 13.sp),
-                ),
-              )
-            ],
-          ),
-        ),
-        Row(
+        /* Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               height: 350.h,
               width: 200.w,
               child: Column(
                 children: [
-                  Padding(
+                  /*Padding(
                     padding: EdgeInsets.only(bottom: 5.r, top: 20.r),
                     child: Text(
                       "Note:",
@@ -120,26 +102,21 @@ class _Problem1State extends State<Problem1> {
                     padding: EdgeInsets.all(8.0.r),
                     child: Text(
                         "Based on my observations and image analysis, I have diagnosed Early Blight on my tomato plant. To prevent further spread, App recommend removing infected leaves. I found detailed information about Early Blight and removal techniques within the app's disease database"),
-                  ),
+                  ),*/
                 ],
               ),
+            ),*/
+        Center(
+          child: SizedBox(
+            height: 250.h,
+            width: 200.w,
+            child: Image.network(
+              widget.jornal.image.path.contains('uploads/')
+                  ? '$baseUrl/${widget.jornal.image.path}'
+                  : '$baseUrl/uploads/${widget.jornal.image.path}',
+              fit: BoxFit.cover,
             ),
-            SizedBox(
-              height: 250.h,
-              width: 200.w,
-              child: Card(
-                child: Image.asset(
-                  'assets/images/close-up-hand-holding-tube-with-seed.png',
-                  fit: BoxFit.cover,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0.r),
-                ),
-                elevation: 10,
-                margin: EdgeInsets.all(10),
-              ),
-            )
-          ],
+          ),
         ),
         Padding(
           padding: EdgeInsets.all(20.0.r),
@@ -160,7 +137,7 @@ class _Problem1State extends State<Problem1> {
                         fontSize: 20.sp),
                   ),
                 ),
-                JournalData(),
+                ImmediateWidget(),
               ],
             ),
           ),
@@ -183,7 +160,7 @@ class _Problem1State extends State<Problem1> {
                         fontSize: 20.sp),
                   ),
                 ),
-                JournalData(),
+                TreatmentWidget(),
               ],
             ),
           ),
@@ -211,11 +188,33 @@ class _Problem1State extends State<Problem1> {
             ),
           ),
         ),
+        Padding(
+          padding: EdgeInsets.all(20.0.r),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Color.fromARGB(15, 0, 221, 255),
+                borderRadius: BorderRadius.circular(20.r)),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 150.0.r, bottom: 10.r),
+                  child: Text(
+                    "Your tasks",
+                    style: TextStyle(
+                        color: Color(0xffCE0000),
+                        fontFamily: AutofillHints.addressCityAndState,
+                        fontSize: 20.sp),
+                  ),
+                ),
+                AddedTaskWidget(),
+              ],
+            ),
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(
-              width: 200.w,
               height: 60.h,
               child: Padding(
                 padding: EdgeInsets.only(left: 23.r, bottom: 10.r, right: 30.r),
@@ -234,7 +233,6 @@ class _Problem1State extends State<Problem1> {
                         color: Colors.white,
                         size: 20.r,
                       ), // Icon before text
-                      SizedBox(width: 10.w), // Spacer between icon and text
                       Text(
                         'Update',
                         style: TextStyle(
@@ -253,7 +251,6 @@ class _Problem1State extends State<Problem1> {
               width: 10.w,
             ),
             SizedBox(
-              width: 200.w,
               height: 60.h,
               child: Padding(
                 padding: EdgeInsets.only(left: 23.r, bottom: 10.r, right: 30.r),

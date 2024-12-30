@@ -87,7 +87,7 @@ class _RegisterState extends State<Register> {
         children: [
           Center(
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(20.0.r),
               child: Image.asset(
                 'assets/images/480-[Converted] - Copy.png',
                 width: 180,
@@ -95,28 +95,28 @@ class _RegisterState extends State<Register> {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
+          Padding(
+            padding: EdgeInsets.all(14.0.r),
             child: Text(
               'Create an account',
               style: TextStyle(
                 color: Color.fromARGB(255, 0, 0, 0),
-                fontSize: 20,
+                fontSize: 30.sp,
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w800,
-                height: 0,
+                height: 0.h,
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
+          Padding(
+            padding: EdgeInsets.all(10.0.r),
             child: Text(
               'Join our plant community',
               style: TextStyle(
                 color: Color.fromARGB(255, 0, 0, 0),
-                fontSize: 15,
+                fontSize: 20.sp,
                 fontFamily: 'Inter',
-                height: 0,
+                height: 0.h,
               ),
             ),
           ),
@@ -142,7 +142,7 @@ class _RegisterState extends State<Register> {
                   height: 15.h,
                 ),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.symmetric(horizontal: 30.0.r),
                     child: boxDesign(
                       validator: (val) {
                         if (val == "") {
@@ -153,9 +153,9 @@ class _RegisterState extends State<Register> {
                       controller: name,
                       Text1: "userName",
                     )),
-                const SizedBox(height: 16.0),
+                SizedBox(height: 16.0.h),
                 Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: EdgeInsets.symmetric(horizontal: 30.0.r),
                     child: boxDesign(
                       validator: (val) {
                         if (val == "") {
@@ -166,9 +166,9 @@ class _RegisterState extends State<Register> {
                       controller: email,
                       Text1: "Email",
                     )),
-                const SizedBox(height: 16.0),
+                SizedBox(height: 16.0.h),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 30.0.r),
                   child: boxDesign(
                     validator: (val) {
                       if (val == "") {
@@ -181,26 +181,26 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 10.h,
                 ),
               ],
             ),
           ),
           Padding(
-              padding: const EdgeInsets.all(25.0),
+              padding: EdgeInsets.all(40.0.r),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(80, 50),
+                    minimumSize: Size(80.w, 50.h),
                     backgroundColor: Color(0xFF54796E),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Sign UP',
                     style: TextStyle(
                       color: Color.fromARGB(255, 255, 255, 255),
-                      fontSize: 15,
+                      fontSize: 20.sp,
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w800,
                     ),
@@ -226,7 +226,7 @@ class _RegisterState extends State<Register> {
                       ).show();
                     }
                   })),
-          Container(
+          /* Container(
             alignment: Alignment.center,
             child: const Text(
               "Or With",
@@ -268,13 +268,14 @@ class _RegisterState extends State<Register> {
                 )
               ],
             ),
-          ),
+          ),*/
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "Already have an account? ",
-                style: TextStyle(color: Colors.black, fontFamily: "iner"),
+                style: TextStyle(
+                    color: Colors.black, fontFamily: "iner", fontSize: 20.sp),
               ),
               TextButton(
                 onPressed: () {
@@ -282,13 +283,13 @@ class _RegisterState extends State<Register> {
                     return const Login();
                   }));
                 },
-                child: const Text(
+                child: Text(
                   'login ',
                   style: TextStyle(
                     color: Color(0xff006633),
-                    fontSize: 16,
+                    fontSize: 20.sp,
                     fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),

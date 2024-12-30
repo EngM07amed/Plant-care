@@ -17,39 +17,44 @@ class Start1 extends StatelessWidget {
             Center(
               child: Image.asset(
                 "assets/images/480-[Converted] - Copy.png",
-                width: 250.w,
-                height: 250.h,
+                width: 300.w,
+                height: 300.h,
               ),
             ),
             Text(
               "SPROUTS",
               style: TextStyle(
                   color: Color(0xff056839),
-                  fontSize: 32.sp,
+                  fontSize: 45.sp,
                   fontFamily: "inika",
+                  fontWeight: FontWeight.w500,
                   height: 0.h),
             ),
-            Text(
-              "Nurturing Plant",
-              style: TextStyle(
-                  color: Color(0xff056839),
-                  fontSize: 15.sp,
-                  fontFamily: "inika",
-                  height: 0.h),
+            Padding(
+              padding: EdgeInsets.all(8.0.r),
+              child: Text(
+                "Nurturing Plant",
+                style: TextStyle(
+                    color: Color(0xff056839),
+                    fontSize: 20.sp,
+                    fontFamily: "inika",
+                    fontWeight: FontWeight.w600,
+                    height: 0.h),
+              ),
             ),
-            SizedBox(height: 100.h),
+            SizedBox(height: 80.h),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF61AF2B),
-                  minimumSize: Size(180.w, 60.h),
+                  minimumSize: Size(250.w, 70.h),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.r),
+                    borderRadius: BorderRadius.circular(40.r),
                   ),
                 ),
                 child: Text(
                   'Get Started',
                   style: TextStyle(
-                    fontSize: 20.sp,
+                    fontSize: 25.sp,
                     fontFamily: 'Inter',
                     color: Colors.white,
                     fontWeight: FontWeight.w800,

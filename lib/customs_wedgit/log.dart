@@ -7,9 +7,11 @@ class Textfiled extends StatefulWidget {
   Textfiled({
     this.la,
     this.hi,
+    required this.cn,
   });
   final String? la;
   final String? hi;
+  final TextEditingController cn;
 
   @override
   State<Textfiled> createState() => _TextfiledState();
@@ -26,6 +28,7 @@ class _TextfiledState extends State<Textfiled> {
                 bottomLeft: Radius.elliptical(9, 9))),
         shadowColor: Color.fromARGB(255, 120, 114, 120),
         child: TextField(
+          controller: widget.cn,
           decoration: InputDecoration(
             labelStyle: TextStyle(color: Colors.grey),
             hintStyle: TextStyle(color: const Color.fromARGB(255, 34, 66, 35)),

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:plantcare/const.dart';
 import 'package:plantcare/customs_wedgit/journalData.dart';
+import 'package:plantcare/models/jornaldata.dart';
 
 class Healthy extends StatefulWidget {
-  const Healthy({super.key});
-
+  const Healthy({super.key, required this.jornal});
+  final JornsalData jornal;
   @override
   State<Healthy> createState() => _HealthyState();
 }
@@ -38,7 +39,7 @@ class _HealthyState extends State<Healthy> {
               ),
             ),
             Text(
-              "None",
+              widget.jornal.diagnoses,
               style: TextStyle(fontSize: 16.sp),
             ),
             SizedBox(
@@ -79,7 +80,7 @@ class _HealthyState extends State<Healthy> {
             indent: 10.r,
           ),
         ),
-        Padding(
+        /* Padding(
           padding: EdgeInsets.only(left: 8.0.r),
           child: Row(
             children: [
@@ -99,45 +100,34 @@ class _HealthyState extends State<Healthy> {
               )
             ],
           ),
-        ),
-        Row(
+        ),*/
+        /* Column(
           children: [
-            SizedBox(
-              height: 300.h,
-              width: 200.w,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10.r, top: 40.r),
-                    child: Text(
-                      "Note:",
-                      style: TextStyle(fontSize: 20.sp),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(5.0.r),
-                    child: Text(
-                        "Excited to see the first flower buds! This is my first time growing tomatoes, and everything seems to be going well so fa"),
-                  ),
-                ],
+            /* Padding(
+              padding: EdgeInsets.only(bottom: 10.r, top: 40.r),
+              child: Text(
+                "Note:",
+                style: TextStyle(fontSize: 20.sp),
               ),
             ),
-            SizedBox(
-              height: 250.h,
-              width: 200.w,
-              child: Card(
-                child: Image.asset(
-                  'assets/images/close-up-hand-holding-tube-with-seed.png',
-                  fit: BoxFit.cover,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0.r),
-                ),
-                elevation: 10,
-                margin: EdgeInsets.all(10),
-              ),
-            )
+            Padding(
+              padding: EdgeInsets.all(5.0.r),
+              child: Text(
+                  "Excited to see the first flower buds! This is my first time growing tomatoes, and everything seems to be going well so fa"),
+            ),*/
           ],
+        ),-*/
+        Center(
+          child: SizedBox(
+            height: 250.h,
+            width: 200.w,
+            child: Image.network(
+              widget.jornal.image.path.contains('uploads')
+                  ? '$baseUrl/${widget.jornal.image.path}'
+                  : '$baseUrl/uploads/${widget.jornal.image.path}',
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
         Padding(
           padding: EdgeInsets.all(20.0.r),
@@ -170,7 +160,7 @@ class _HealthyState extends State<Healthy> {
                     ],
                   ),
                 ),
-                JournalData(),
+                ImmediateWidget(),
               ],
             ),
           ),
@@ -200,11 +190,33 @@ class _HealthyState extends State<Healthy> {
             ),
           ),
         ),
+        Padding(
+          padding: EdgeInsets.all(20.0.r),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Color.fromARGB(15, 0, 221, 255),
+                borderRadius: BorderRadius.circular(20.r)),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 150.0.r, bottom: 10.r),
+                  child: Text(
+                    "Your tasks",
+                    style: TextStyle(
+                        color: Color(0xffCE0000),
+                        fontFamily: AutofillHints.addressCityAndState,
+                        fontSize: 20.sp),
+                  ),
+                ),
+                const AddedTaskWidget(),
+              ],
+            ),
+          ),
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(
-              width: 200.w,
               height: 60.h,
               child: Padding(
                 padding: EdgeInsets.only(left: 23.r, bottom: 10.r, right: 30.r),
@@ -242,7 +254,6 @@ class _HealthyState extends State<Healthy> {
               width: 10.w,
             ),
             SizedBox(
-              width: 200.w,
               height: 60.h,
               child: Padding(
                 padding: EdgeInsets.only(left: 23.r, bottom: 10.r, right: 30.r),

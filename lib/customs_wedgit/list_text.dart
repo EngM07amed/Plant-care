@@ -1,49 +1,38 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BulletList extends StatelessWidget {
-  const BulletList({super.key, required this.items});
+  const BulletList({super.key, required this.items, this.physics});
   final List<String> items;
-
+  final ScrollPhysics? physics;
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
+        physics: physics,
         itemCount: items.length,
-        prototypeItem: ListTile(
-          title: Text(items.first),
-        ),
         itemBuilder: (context, index) {
           return Padding(
-            padding: const EdgeInsets.only(left: 15.0, top: 3),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '\u2022',
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 2,
-                  ),
-                ),
-                const SizedBox(
-                  width: 1,
-                ),
-                Container(
-                  width: 380.w,
-                  child: Text(
-                    items[index],
-                    textAlign: TextAlign.left,
-                    softWrap: true,
+            padding: EdgeInsets.only(left: 20.r, top: 6.r),
+            child: RichText(
+              softWrap: true,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: '\u2022  ',
+                      style: TextStyle(fontSize: 20.sp, color: Colors.black)),
+                  TextSpan(
+                    text: items[index],
                     style: TextStyle(
-                      fontSize: 18.r,
-                      color: Color.fromARGB(255, 21, 49, 23),
-                      height: 2,
+                      color: const Color.fromARGB(255, 21, 49, 23),
+                      fontSize: 24.sp,
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         });
